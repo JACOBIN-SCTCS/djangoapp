@@ -1,5 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import User 
+from django.contrib.auth.models import User
+from django.utils import timezone
+
 
 
 categories =(
@@ -11,7 +13,7 @@ categories =(
     ('AS','Ad-hoc Staff'),
     ('PF','Part time Staff'),
     ('OT','Office Trainee'),
-    ('DT','Department Trainee')
+    ('DT','Department Trainee'),
 )
 
 departments =(
@@ -24,8 +26,14 @@ departments =(
     ('APPL' ,'Applied Science'),
     ('LIB','Library'),
     ('ADM','Administration'),
-    ('OTH','Others')
+    ('OTH','Others'),
 )
+
+leave_type = (
+    ((0,'A'),(1,'P'),(2,'CL'),(3,'ComL'),(4,'EL'),(5,'HPL'),(6,'LA'),(7,'DL'))
+)
+
+
 
 class staff_category(models.Model):
 
@@ -44,10 +52,10 @@ class staff_category(models.Model):
 class staff(models.Model):
 
     def __str__(self):
-         return self.staff_id
+         return str(self.staff_id)
 
-
-    staff_id=models.IntegerField(primary_key=True)
+    user=models.OneToOneField(User,on_delete=models.CASCADE ,null=False,default=None)
+    staff_id=models.IntegerField(primary_key=True ,unique=True)
     name=models.CharField(max_length=30 ,default="employee")
     category=models.ForeignKey(staff_category,on_delete=None)
     department=models.CharField(max_length=5,choices=departments,default='OTH')
@@ -56,11 +64,12 @@ class staff(models.Model):
     termination_date=models.DateField(default=None,blank=True)
 
 
+
 class leave(models.Model):
+
+
     def __str__(self):
-        return self.emp_id.staff_id
-
-
+        return str(self.emp_id.staff_id)
 
     emp_id=models.ForeignKey(staff,on_delete=models.CASCADE)
     present_days=models.IntegerField(default=0)
@@ -70,3 +79,13 @@ class leave(models.Model):
     half_pay_leave = models.IntegerField(default=0)
     leave_allowance= models.IntegerField(default=0)
     duty_leave = models.IntegerField(default=0)
+
+
+
+class rec(models.Model):
+    emp_id=models.ForeignKey(staff,on_delete=models.CASCADE)
+    date=models.DateField(default=timezone.now())
+    status=models.IntegerField(default='-1',choices=leave_type)
+    time_in = models.DateTimeField(null=True)
+    time_out = models.DateTimeField(null=True)
+
