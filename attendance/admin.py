@@ -6,3 +6,8 @@ admin.site.register(staff_category)
 admin.site.register(staff)
 admin.site.register(leave)
 admin.site.register(rec)
+
+
+
+
+

@@ -54,7 +54,7 @@ class staff(models.Model):
     def __str__(self):
          return str(self.staff_id)
 
-    user=models.OneToOneField(User,on_delete=models.CASCADE ,null=False,default=None)
+    user=models.OneToOneField(User,on_delete=models.CASCADE ,null=True,default=None)
     staff_id=models.IntegerField(primary_key=True ,unique=True)
     name=models.CharField(max_length=30 ,default="employee")
     category=models.ForeignKey(staff_category,on_delete=None)
