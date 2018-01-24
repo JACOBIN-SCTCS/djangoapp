@@ -15,7 +15,10 @@ def dashboard(request):
     return render(request,'attendance/user_dashboard.html')
 
 def admin_dashboard(request):
-    return render(request,'attendance/admin_dashboard.html')
+    if request.user.is_superuser==User.is_superuser:
+        return render(request,'attendance/admin_dashboard.html')
+    else:
+        return redirect('attendance:login')
 
 #login for a user
 def login_user(request):
@@ -46,8 +49,8 @@ def  register(request):
         if form.is_valid():
             staff=form.save(commit=False)
             id = form.cleaned_data['staff_id']
-            user=User.objects.create_user(username=id
-                                         , password="user"+str(id))
+            user = User.objects.create_user(username=str(form.cleaned_data['staff_id'])
+                                                     , password='user'+str(form.cleaned_data['staff_id']))
 
             staff.user=user
             staff.save()
