@@ -12,9 +12,12 @@ from django.views.generic import View
 
 
 def dashboard(request):
-    return render(request,'attendance/user_form.html')
+    return render(request,'attendance/user_dashboard.html')
 
+def admin_dashboard(request):
+    return render(request,'attendance/admin_dashboard.html')
 
+#login for a user
 def login_user(request):
     if request.method=='POST':
         form=LoginForm(request.POST)
@@ -25,7 +28,10 @@ def login_user(request):
             user=authenticate(username=name,password=password)
             if user is not None:
                 login(request,user)
-                return redirect('attendance:dash_board')
+                if not user.is_superuser:
+                    return redirect('attendance:dash_board')
+                else:
+                    return redirect('attendance:admin_user')
     else:
         form=LoginForm()
     return render(request,'attendance/login.html',{'form':form})
@@ -33,20 +39,22 @@ def login_user(request):
 
 
 
-
+#register a user ( a facility for a superuser (admin))
 def  register(request):
     if request.method=='POST':
         form=RegisterForm(request.POST)
         if form.is_valid():
             staff=form.save(commit=False)
-            user=User.objects.create_user(username=str(form.cleaned_data['staff_id'])
-                                         , password=form.cleaned_data['staff_id'])
-            id=form.cleaned_data['staff_id']
+            id = form.cleaned_data['staff_id']
+            user=User.objects.create_user(username=id
+                                         , password="user"+str(id))
+
             staff.user=user
             staff.save()
 
             leave_rec=leave(emp_id=staff)
             leave_rec.save()
+
 
 
 
@@ -58,3 +66,6 @@ def  register(request):
 
 
 
+
+
+#delete a user from the app
