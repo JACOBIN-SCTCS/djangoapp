@@ -3,8 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
 </head>
 <body>
+
+{% load staticfiles %}
+
+{% for staff in staffs %}
+  <h1>{{staff.staff_id }}</h1>
+<a href="{% url 'attendance:delete' id=staff.staff_id %}"><img src="{% static 'images/delete.png' %}  " alt="delete"/></a>
+
+
+{% endfor %}
 
 </body>
 </html>

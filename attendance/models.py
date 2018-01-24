@@ -54,7 +54,7 @@ class staff(models.Model):
     def __str__(self):
          return str(self.staff_id)
 
-    user=models.OneToOneField(User,on_delete=models.CASCADE ,null=True,default=None)
+    user=models.OneToOneField(User,null=True,on_delete=models.CASCADE,default=None)
     staff_id=models.IntegerField(primary_key=True ,unique=True)
     name=models.CharField(max_length=30 ,default="employee")
     category=models.ForeignKey(staff_category,on_delete=None)
@@ -88,4 +88,6 @@ class rec(models.Model):
     status=models.IntegerField(default='-1',choices=leave_type)
     time_in = models.DateTimeField(null=True)
     time_out = models.DateTimeField(null=True)
+
+
 
