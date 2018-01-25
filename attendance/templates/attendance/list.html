@@ -7,12 +7,18 @@
 </head>
 <body>
 
-{% load staticfiles %}
+{% load static %}
 
 {% for staff in staffs %}
   <h1>{{staff.staff_id }}</h1>
-<a href="{% url 'attendance:delete' id=staff.staff_id %}"><img src="{% static 'images/delete.png' %}  " alt="delete"/></a>
+{% if delflag %}
+<a href="{% url 'attendance:delete' id=staff.staff_id %}"><img src="{% static 'static/delete.png' %}  " alt="delete"/></a>
+{% endif %}
 
+{% if updateflag %}
+   <a href="{% url 'attendance:update' pk=staff.staff_id %}"><img src="{% static 'static/delete.png' %}  " alt="update"/></a>
+
+{% endif %}
 
 {% endfor %}
 

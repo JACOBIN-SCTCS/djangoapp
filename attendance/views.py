@@ -3,11 +3,11 @@ from django.http import HttpResponse ,HttpResponseRedirect
 from  .forms import LoginForm,RegisterForm
 from django.contrib.auth import authenticate,login
 from django.contrib.auth.models import User
-from django.shortcuts import redirect ,get_object_or_404
-from .models import leave,rec
-from django.views.generic import View
+from django.shortcuts import redirect
+from .models import leave
 from .models import staff
 from django.urls import reverse
+from django.views.generic.edit import UpdateView
 # Create your views here.
 
 
@@ -49,7 +49,7 @@ def login_user(request):
 
 #register a user ( a facility for a superuser (admin))
 def  register(request):
-
+    if request.user.is_superuser:
         if request.method=='POST':
             form=RegisterForm(request.POST)
             if form.is_valid():
@@ -67,23 +67,44 @@ def  register(request):
 
 
 
-                return redirect('attendance:dash_board')
+                return redirect('attendance:admin_user')
 
         else:
             form=RegisterForm()
         return render(request,'attendance/register.html',{'form':form})
-
+    else:
+        return redirect('attendance:login')
 
 
 
 
 #delete a user from the app
 def delete_user(request):
+    del_flag=1
     staff_list=staff.objects.all()
-    return render(request,'attendance/delete.html',{'staffs':staff_list})
+    return render(request,'attendance/list.html',{'staffs':staff_list , 'delflag':del_flag })
 
 
 def delete(request,id):
     userfield=User.objects.get(username=id)
     userfield.delete()
     return HttpResponseRedirect(reverse('attendance:delete_user'))
+
+
+
+def update(request):
+    updateflag=1
+    staff_list=staff.objects.all()
+    return render(request,'attendance/list.html',{'staffs':staff_list , 'updateflag':updateflag })
+
+class Update_view(UpdateView):
+    model = staff
+    fields = ['staff_id','name','category','department','qualification'
+                ,'joining_date','termination_date']
+
+    template_name_suffix = '_update_form'
+
+
+
+
+
