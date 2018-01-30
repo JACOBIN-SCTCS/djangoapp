@@ -1,7 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.utils import timezone
+import django.utils.timezone as timezone
 
+
+designa=(
+    ('H' ,'HOD'),
+    ('P','Principal')
+)
 
 
 categories =(
@@ -64,6 +69,11 @@ class staff(models.Model):
     termination_date=models.DateField(default=None,blank=True)
 
 
+class dept(models.Model):
+    emp=models.ForeignKey(staff,on_delete=models.CASCADE)
+    designation=models.CharField(choices=designa,max_length=5)
+
+
 
 class leave(models.Model):
 
@@ -85,9 +95,21 @@ class leave(models.Model):
 class rec(models.Model):
     emp_id=models.ForeignKey(staff,on_delete=models.CASCADE)
     date=models.DateField(default=timezone.now())
-    status=models.IntegerField(default='-1',choices=leave_type)
+    status=models.BooleanField(default=1)
     time_in = models.DateTimeField(null=True)
     time_out = models.DateTimeField(null=True)
+
+
+
+class leave_request(models.Model):
+    emp=models.ForeignKey(staff,on_delete=models.CASCADE)
+    date=models.DateField(default=timezone.now())
+    type=models.IntegerField(choices=leave_type,default=2)
+    desc=models.CharField(max_length=500,default="")
+    is_accepted=models.BooleanField(default=0)
+
+
+
 
 
 

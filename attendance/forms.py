@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.models import User
+from .models import leave_request
 from .models import staff
 
 
@@ -24,5 +24,15 @@ class RegisterForm(forms.ModelForm):
         model=staff
         fields=('staff_id','name','category','department','qualification'
                 ,'joining_date','termination_date')
+
+
+class LeaveRequestForm(forms.ModelForm):
+
+    class Meta:
+        model=leave_request
+        fields=('date','type','desc')
+
+
+
 
 

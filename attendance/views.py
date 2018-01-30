@@ -1,14 +1,16 @@
 from django.shortcuts import render
-from django.http import HttpResponse ,HttpResponseRedirect
-from  .forms import LoginForm,RegisterForm
+from django.http import  HttpResponseRedirect
+from .forms import LoginForm , RegisterForm,LeaveRequestForm
 from django.contrib.auth import authenticate,login
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from .models import leave
 from .models import staff
+from .models import rec
 from django.urls import reverse
 from django.views.generic.edit import UpdateView
-# Create your views here.
+
+
 
 
 #view for a user dashboard
@@ -78,13 +80,16 @@ def  register(request):
 
 
 
-#delete a user from the app
+#delete a user from the app (UI)
 def delete_user(request):
     del_flag=1
     staff_list=staff.objects.all()
     return render(request,'attendance/list.html',{'staffs':staff_list , 'delflag':del_flag })
 
 
+
+
+#performs the delete operation
 def delete(request,id):
     userfield=User.objects.get(username=id)
     userfield.delete()
@@ -92,17 +97,55 @@ def delete(request,id):
 
 
 
+
+#updating the info of a user(UI0
 def update(request):
     updateflag=1
     staff_list=staff.objects.all()
     return render(request,'attendance/list.html',{'staffs':staff_list , 'updateflag':updateflag })
 
+
+
+#updating a user functionality
 class Update_view(UpdateView):
     model = staff
     fields = ['staff_id','name','category','department','qualification'
                 ,'joining_date','termination_date']
 
     template_name_suffix = '_update_form'
+
+
+
+#method to list out the leaves taken by the current user
+def leaves(request):
+
+    recs=rec.objects.filter(status=0  , emp_id=staff.objects.get(staff_id=request.user.username))
+    return render(request,'attendance/leaves_table_list.html',{'recs':recs})
+
+def leave_request(request,pk):
+    requested_leave = rec.objects.get(id=pk)
+
+    if request.method=='POST':
+        form=LeaveRequestForm(request.POST)
+        if form.is_valid():
+
+            leave_req=form.save(commit=False)
+
+            leave_req.is_accepted=False
+            leave_req.emp=requested_leave.emp_id
+            leave_req.date=requested_leave.date
+
+
+            leave_req.save()
+
+
+            return redirect('attendance:leaves')
+    else:
+
+        form=LeaveRequestForm(initial={'date':requested_leave.date})
+    return render(request,'attendance/leave_request.html',{'form':form})
+
+
 
 
 
