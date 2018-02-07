@@ -7,6 +7,10 @@
 <body>
 
 
+
+{% if hod %}
+<h1 ><a href="{% url 'attendance:pendingleaverequests' %}">SEE LEAVE REQUESTS</a> </h1>
+{% endif %}
 <h1>LOGGED IN</h1>
 <h1><a href="{% url 'attendance:leaves' %}"> Leave Request</a></h1>
     <h1></h1>

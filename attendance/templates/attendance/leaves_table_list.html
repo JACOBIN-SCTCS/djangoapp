@@ -7,6 +7,10 @@
 <body>
 
 
+<!-- LISTS ALL THE LEAVES TAKEN BY AN EMPLLOYEE  -->
+
+
+
 {% for rec in recs %}
 <h1><a href="{% url 'attendance:leave_request' pk=rec.pk %}">{{rec.date}}</a></h1>
 {% endfor %}

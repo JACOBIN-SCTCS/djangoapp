@@ -4,12 +4,24 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
+
+
+<!-- REGISTERING A NEW EMPLOYEE INTO THE DATABASE THE FORM CONTAINS ALL FILEDS FROM THE
+STAFF TABLE -->
+
+
 <body>
+
 
 <form method="POST" action="" >
     {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" >Save</button>
+</form>
 
 </body>
 </html>
+
+
+
+

@@ -6,7 +6,8 @@ from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from .models import leave
 from .models import staff
-from .models import rec
+from .models import rec ,dept
+from .models import leave_request as lrequest
 from django.urls import reverse
 from django.views.generic.edit import UpdateView
 
@@ -15,7 +16,22 @@ from django.views.generic.edit import UpdateView
 
 #view for a user dashboard
 def dashboard(request):
-        return render(request,'attendance/user_dashboard.html')
+
+    current_user=request.user
+    current_staff=staff.objects.get(user=current_user)
+
+    department_hods = dept.objects.all()
+
+    if department_hods.filter(emp=current_staff).exists():
+        hod={ 'hod' : current_staff}
+    else:
+        hod=None
+
+
+
+    return render(request,'attendance/user_dashboard.html',hod)
+
+
 
 
 #view for the admin dashboard
@@ -134,6 +150,7 @@ def leave_request(request,pk):
             leave_req.is_accepted=False
             leave_req.emp=requested_leave.emp_id
             leave_req.date=requested_leave.date
+            leave_req.department=requested_leave.emp_id.department
 
 
             leave_req.save()
@@ -144,6 +161,28 @@ def leave_request(request,pk):
 
         form=LeaveRequestForm(initial={'date':requested_leave.date})
     return render(request,'attendance/leave_request.html',{'form':form})
+
+
+
+
+def available_leave_request(request):
+
+
+
+    current_user=request.user
+    current_staff=staff.objects.get(user=current_user)
+
+    department_hods = dept.objects.all()
+
+    if department_hods.filter(emp=current_staff).exists():
+
+        leaverequests=lrequest.objects.filter(is_accepted=False,department=current_staff.department )
+        return render(request, 'attendance/leave_requests_list.html',{'requests':leaverequests})
+
+    else:
+        return redirect('attendance:dash_board')
+
+
 
 
 

@@ -2,9 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>$Title$</title>
+    <title>Title</title>
 </head>
+
+<!-- CONTAINS THE LIST OF ALL LEAVE REQUESTS PENDING VISIBLE TO THE HOD OF A DEPARTMENT-->
+
 <body>
-$END$
+
+{% for req in requests %}
+
+
+<h1>{{req.emp.name }}</h1>
+{% endfor %}
+
+
+
 </body>
 </html>

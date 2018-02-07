@@ -102,11 +102,16 @@ class rec(models.Model):
 
 
 class leave_request(models.Model):
+
+
+
     emp=models.ForeignKey(staff,on_delete=models.CASCADE)
+    department=models.CharField(max_length=5,choices=departments,default='OTH')
     date=models.DateField(default=timezone.now())
     type=models.IntegerField(choices=leave_type,default=2)
-    desc=models.CharField(max_length=500,default="")
+    desc=models.TextField(max_length=500,default="")
     is_accepted=models.BooleanField(default=0)
+
 
 
 
