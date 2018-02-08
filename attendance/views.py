@@ -14,7 +14,12 @@ from django.views.generic.edit import UpdateView
 
 
 
+
+
+
 #view for a user dashboard
+# url = 127.0.0.1:8000/dashboard
+
 def dashboard(request):
 
     current_user=request.user
@@ -35,6 +40,8 @@ def dashboard(request):
 
 
 #view for the admin dashboard
+# url = 127.0.0.1:8000/admin_user
+
 def admin_dashboard(request):
         if request.user.is_superuser:
             return render(request,'attendance/admin_dashboard.html')
@@ -44,6 +51,8 @@ def admin_dashboard(request):
 
 
 #login for a user
+# url = 127.0.0.1:8000/login
+
 def login_user(request):
     if request.method=='POST':
         form=LoginForm(request.POST)
@@ -66,6 +75,8 @@ def login_user(request):
 
 
 #register a user ( a facility for a superuser (admin))
+# url = 127.0.0.1:8000/admin_user/register/
+
 def  register(request):
     if request.user.is_superuser:
         if request.method=='POST':
@@ -97,6 +108,8 @@ def  register(request):
 
 
 #delete a user from the app (UI)
+# url=127.0.0.1:8000/admin_user/delete/
+
 def delete_user(request):
     del_flag=1
     staff_list=staff.objects.all()
@@ -105,7 +118,7 @@ def delete_user(request):
 
 
 
-#performs the delete operation
+#performs the delete operation (functionality ) and redirects back to  staffs list
 def delete(request,id):
     userfield=User.objects.get(username=id)
     userfield.delete()
@@ -115,6 +128,8 @@ def delete(request,id):
 
 
 #updating the info of a user(UI0
+# url=127.0.0.1:8000/admin_user/update/
+
 def update(request):
     updateflag=1
     staff_list=staff.objects.all()
@@ -122,7 +137,8 @@ def update(request):
 
 
 
-#updating a user functionality
+#updating a user (functionality)
+
 class Update_view(UpdateView):
     model = staff
     fields = ['staff_id','name','category','department','qualification'
@@ -133,10 +149,17 @@ class Update_view(UpdateView):
 
 
 #method to list out the leaves taken by the current user
+#  url = 127.0.0.1:8000/dashboard/leave
+
 def leaves(request):
 
     recs=rec.objects.filter(status=0  , emp_id=staff.objects.get(staff_id=request.user.username))
     return render(request,'attendance/leaves_table_list.html',{'recs':recs})
+
+
+
+#method which displays a form for submitting leave request
+#  url = 127.0.0.1:8000/dashboard/leave/id/<leave_id>/
 
 def leave_request(request,pk):
     requested_leave = rec.objects.get(id=pk)
@@ -164,7 +187,7 @@ def leave_request(request,pk):
 
 
 
-
+# shows all the leave requests which needs to be approved by the HOD
 def available_leave_request(request):
 
 
@@ -181,6 +204,47 @@ def available_leave_request(request):
 
     else:
         return redirect('attendance:dash_board')
+
+
+
+
+#helper method for incrementing the leave of the person from the leave type
+def increment_leave_count(staff_leave_record , leave_id):
+
+    if leave_id==1:
+        staff_leave_record.casual_leave+=1
+    elif leave_id==2:
+        staff_leave_record.compensation_leave+=1
+    elif leave_id==3:
+        staff_leave_record.earned_leave+=1
+    elif leave_id==4:
+        staff_leave_record.half_pay_leave+=1
+    elif leave_id==5:
+        staff_leave_record. leave_allowance+=1
+    elif leave_id==6:
+        staff_leave_record.duty_leave +=1
+    staff_leave_record.save()
+
+
+
+
+#method whhich approves the leave request does the functionality
+def approve_leave_requests(request,pk):
+    current_request=lrequest.objects.get(pk=pk)
+    current_request.is_accepted=True
+    leave_id=current_request.type
+    staff_leave_record=leave.objects.get(emp_id=current_request.emp)
+    increment_leave_count(staff_leave_record,leave_id)
+    current_request.save()
+
+    return HttpResponseRedirect(reverse('attendance:pendingleaverequests'))
+
+
+
+
+
+
+
 
 
 

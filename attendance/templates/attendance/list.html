@@ -19,11 +19,11 @@
 {% for staff in staffs %}
   <h1>{{staff.staff_id }}</h1>
 {% if delflag %}
-<a href="{% url 'attendance:delete' id=staff.staff_id %}"><img src="{% static 'delete.png' %}  " alt="delete"/></a>
+<a href="{% url 'attendance:delete' id=staff.staff_id %}"><img src="{% static 'delete' %}  " alt="delete"/></a>
 {% endif %}
 
 {% if updateflag %}
-   <a href="{% url 'attendance:update' pk=staff.staff_id %}"><img src="{% static 'delete.png' %}  " alt="update"/></a>
+   <a href="{% url 'attendance:update' pk=staff.staff_id %}"><img src="{% static 'delete' %}  " alt="update"/></a>
 
 {% endif %}
 

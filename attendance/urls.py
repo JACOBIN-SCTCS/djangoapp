@@ -41,7 +41,12 @@ urlpatterns =[
 
 
     #shows the available leave reuests which needs to be approved by HOD
-    path('dashboard/leave_requests/' , views.available_leave_request,name='pendingleaverequests')
+    path('dashboard/leave_requests/' , views.available_leave_request,name='pendingleaverequests'),
+
+    # approves the leave for taken by a person and redirects to dashboard/leave_requests
+    path('dashboard/leave_requests/id/<int:pk>',views.approve_leave_requests,name='approve_leave_request' )
+
+
 ]
 
 

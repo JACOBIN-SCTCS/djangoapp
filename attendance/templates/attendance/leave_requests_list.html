@@ -7,13 +7,42 @@
 
 <!-- CONTAINS THE LIST OF ALL LEAVE REQUESTS PENDING VISIBLE TO THE HOD OF A DEPARTMENT-->
 
+
+<style>
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+</style>
+
+
 <body>
 
-{% for req in requests %}
 
 
-<h1>{{req.emp.name }}</h1>
-{% endfor %}
+
+
+<table>
+    <tr>
+        <th>Employee Name</th>
+        <th>Date </th>
+        <th>Approve</th>
+    </tr>
+
+   {% for req in requests %}
+    <tr>
+        <th>{{req.emp.name}}</th>
+        <th>{{req.date }}</th>
+        <th><a href="{% url 'attendance:approve_leave_request' pk=req.pk %}">Approve</a> </th>
+
+    </tr>
+
+    {% endfor %}
+
+
+</table>
+
+
 
 
 
