@@ -25,12 +25,17 @@ def dashboard(request):
     current_user=request.user
     current_staff=staff.objects.get(user=current_user)
 
+    casual_leaves_taken_object = leave.objects.get(emp_id=current_staff)
+    casual_leaves_taken=casual_leaves_taken_object.casual_leave
+    max_casual_leaves = current_staff.category.max_casual_leave
+    casual_leaves_remaining = max_casual_leaves-casual_leaves_taken
+
     department_hods = dept.objects.all()
 
     if department_hods.filter(emp=current_staff).exists():
-        hod={ 'hod' : current_staff}
+        hod={ 'hod' : current_staff, 'principal':None,'name':current_staff.name,'rem_leave':casual_leaves_remaining}
     else:
-        hod=None
+        hod={ 'hod' : None, 'principal':None,'name':current_staff.name,'rem_leave':casual_leaves_remaining}
 
 
 
