@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import  HttpResponseRedirect
 from .forms import LoginForm , RegisterForm,LeaveRequestForm
-from django.contrib.auth import authenticate,login
+from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from .models import leave
@@ -10,6 +10,7 @@ from .models import rec ,dept
 from .models import leave_request as lrequest
 from django.urls import reverse
 from django.views.generic.edit import UpdateView
+from django.contrib.auth.decorators import user_passes_test
 
 
 
@@ -77,6 +78,13 @@ def login_user(request):
     return render(request,'attendance/login.html',{'form':form})
 
 
+#logout
+
+def logout_user(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('attendance:login'))
+
+
 
 
 #register a user ( a facility for a superuser (admin))
@@ -115,6 +123,7 @@ def  register(request):
 #delete a user from the app (UI)
 # url=127.0.0.1:8000/admin_user/delete/
 
+@user_passes_test(lambda u : u.is_superuser)
 def delete_user(request):
     del_flag=1
     staff_list=staff.objects.all()
@@ -124,6 +133,8 @@ def delete_user(request):
 
 
 #performs the delete operation (functionality ) and redirects back to  staffs list
+
+@user_passes_test(lambda u : u.is_superuser)
 def delete(request,id):
     userfield=User.objects.get(username=id)
     userfield.delete()
@@ -135,6 +146,7 @@ def delete(request,id):
 #updating the info of a user(UI0
 # url=127.0.0.1:8000/admin_user/update/
 
+@user_passes_test(lambda u : u.is_superuser,login_url='/login')
 def update(request):
     updateflag=1
     staff_list=staff.objects.all()
@@ -167,6 +179,9 @@ def leaves(request):
 #  url = 127.0.0.1:8000/dashboard/leave/id/<leave_id>/
 
 def leave_request(request,pk):
+    current_user=request.user
+    current_staff=staff.objects.get(user=current_user)
+
     requested_leave = rec.objects.get(id=pk)
 
     if request.method=='POST':
@@ -175,7 +190,10 @@ def leave_request(request,pk):
 
             leave_req=form.save(commit=False)
 
-            leave_req.is_accepted=False
+            leave_req.is_accepted_by_hod=leave_req.is_accepted_by_princi=False
+            if (dept.objects.filter(emp=current_staff).exists):
+                leave_req.is_accepted_by_hod=True
+
             leave_req.emp=requested_leave.emp_id
             leave_req.date=requested_leave.date
             leave_req.department=requested_leave.emp_id.department
@@ -202,10 +220,22 @@ def available_leave_request(request):
 
     department_hods = dept.objects.all()
 
+
+
     if department_hods.filter(emp=current_staff).exists():
 
-        leaverequests=lrequest.objects.filter(is_accepted=False,department=current_staff.department )
-        return render(request, 'attendance/leave_requests_list.html',{'requests':leaverequests})
+
+
+        empobject=dept.objects.get(emp=current_staff)
+
+        if empobject.designation=='H':
+
+            leaverequests=lrequest.objects.filter(is_accepted_by_hod=False,department=current_staff.department).exclude(emp=current_staff)
+
+            return render(request, 'attendance/leave_requests_list.html',{'requests':leaverequests})
+        elif empobject.designation=='P':
+            leaverequests=lrequest.objects.filter(is_accepted_by_princi=False)
+            return render(request, 'attendance/leave_requests_list.html',{'requests':leaverequests})
 
     else:
         return redirect('attendance:dash_board')
@@ -235,27 +265,27 @@ def increment_leave_count(staff_leave_record , leave_id):
 
 #method whhich approves the leave request does the functionality
 def approve_leave_requests(request,pk):
+    current_user=request.user
+    current_staff=staff.objects.get(user=current_user)
+    hod_or_principal=dept.objects.get(emp=current_staff)
+
+
     current_request=lrequest.objects.get(pk=pk)
-    current_request.is_accepted=True
-    leave_id=current_request.type
-    staff_leave_record=leave.objects.get(emp_id=current_request.emp)
-    increment_leave_count(staff_leave_record,leave_id)
+    if(hod_or_principal.designation=='H'):
+        current_request.is_accepted_by_hod=True
+    elif (hod_or_principal.designation=='P'):
+        current_request.is_accepted_by_princi = True
     current_request.save()
+
+    if(current_request.is_accepted_by_hod==True and current_request.is_accepted_by_princi==True):
+
+        leave_id=current_request.type
+
+        staff_leave_record=leave.objects.get(emp_id=current_request.emp)
+        increment_leave_count(staff_leave_record,leave_id)
+
 
     return HttpResponseRedirect(reverse('attendance:pendingleaverequests'))
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+       

@@ -12,8 +12,9 @@
     font-family: monospace;
     color: grey;
     padding-top:8px;
-    text-align: center;
+    text-align: left;
 }
+
 
 .sidebar{
     padding-top:50px;
@@ -36,7 +37,7 @@ h2{
     text-align: center;
     font-family: monospace;
     color: dimgray;
-    
+
 }
 .main{
     margin-top:10px;
@@ -80,3 +81,6 @@ h2{
     position:fixed;
     bottom: 0;
 }
+
+
+

@@ -7,14 +7,17 @@
     height:50px;
     background-color: yellowgreen;
     position: fixed;
+
 }
 .header h1{
     font-family: monospace;
     color: grey;
     padding-top:8px;
     margin-left: 20px;
-    
-}
+
+   }
+
+
 .sidebar{
     float:left;
     margin-top:50px;
@@ -29,7 +32,7 @@
     text-decoration: none;
     font-family: monospace;
     color:white;
-   
+
     height:50px;
     padding-top: 20px;
     font-size: 20px;
@@ -37,10 +40,10 @@
 }
 .sidebar a:hover{
     background-color: darkgrey;
-    
+
 }
 h2{
-   
+
      padding:30px;
     text-align: center;
     font-family: monospace;
@@ -65,15 +68,15 @@ h2{
     font-family:monospace;
     font-size: 38px;
     padding-top: 20px;
-    
+
 }
 #summary{
     margin-top: 30px;
     text-align: center;
     width:inherit;
     height:60px;
-   
-    
+
+
 }
 #summary h1{
     font-family: monospace;
@@ -103,3 +106,7 @@ h2{
     position: fixed;
     bottom: 0;
 }
+
+
+
+

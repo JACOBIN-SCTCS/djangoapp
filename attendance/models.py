@@ -88,7 +88,10 @@ class staff(models.Model):
     termination_date=models.DateField(default=None,blank=True)
 
 
-# table for storing hod's and principal ( people who have to approve leaves
+
+
+
+   # table for storing hod's and principal ( people who have to approve leaves
 class dept(models.Model):
     emp=models.ForeignKey(staff,on_delete=models.CASCADE)
     designation=models.CharField(choices=designa,max_length=5)
@@ -130,11 +133,8 @@ class leave_request(models.Model):
     date=models.DateField(default=timezone.now)
     type=models.IntegerField(choices=leave_type,default=2)
     desc=models.TextField(max_length=500,default="")
-    is_accepted=models.BooleanField(default=0)
-
-
-
-
+    is_accepted_by_hod=models.BooleanField(default=0)
+    is_accepted_by_princi = models.BooleanField(default=False)
 
 
 
