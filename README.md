@@ -9,6 +9,8 @@ python3 manage.py flush
 
 detailed url structure in attendance/urls.py
 
+(The app is a dumping ground of a dead thing )
+
 
 
 
