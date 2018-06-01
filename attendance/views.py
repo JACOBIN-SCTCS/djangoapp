@@ -191,12 +191,13 @@ def leave_request(request,pk):
             leave_req=form.save(commit=False)
 
             leave_req.is_accepted_by_hod=leave_req.is_accepted_by_princi=False
-            if (dept.objects.filter(emp=current_staff).exists):
+            if (dept.objects.filter(emp=current_staff).exists()):
                 leave_req.is_accepted_by_hod=True
 
             leave_req.emp=requested_leave.emp_id
             leave_req.date=requested_leave.date
             leave_req.department=requested_leave.emp_id.department
+
 
 
             leave_req.save()
@@ -288,4 +289,3 @@ def approve_leave_requests(request,pk):
     return HttpResponseRedirect(reverse('attendance:pendingleaverequests'))
 
 
-       

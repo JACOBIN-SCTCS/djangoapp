@@ -79,7 +79,7 @@ class staff(models.Model):
          return str(self.staff_id)
 
     user=models.OneToOneField(User,null=True,on_delete=models.CASCADE,default=None)
-    staff_id=models.IntegerField(primary_key=True ,unique=True)
+    staff_id=models.IntegerField(primary_key=True ,unique=True) #must be alphanumeric
     name=models.CharField(max_length=30 ,default="employee")
     category=models.ForeignKey(staff_category,on_delete=None)
     department=models.CharField(max_length=5,choices=departments,default='OTH')

@@ -33,6 +33,11 @@ urlpatterns =[
     #logging a user in
     path('login/',views.login_user,name='login'),
 
+    #logging a user out
+    path('logout/',views.logout_user,name='logout'),
+
+
+
     #page displaying table for the days absent
     path('dasboard/leaves',views.leaves,name='leaves'),
 
