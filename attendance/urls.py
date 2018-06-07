@@ -17,14 +17,11 @@ urlpatterns =[
     path('admin_user/register/',views.register,name='register'),
 
 
-    #delete page (may be changed)
-    path('admin_user/delete/', views.delete_user, name='delete_user'),
-
+    
     #url performs the delete functionality
     path('admin_user/delete/<int:id>', views.delete, name='delete'),
 
-    # updating a user page (may be changed)
-    path('admin_user/update/', views.update, name='update_user'),
+   
 
     #url performs update
     path('admin_user/update/<int:pk>', views.Update_view.as_view(), name='update'),

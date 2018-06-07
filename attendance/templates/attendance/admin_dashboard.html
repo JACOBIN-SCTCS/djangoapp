@@ -1,16 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <title>Title</title>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'attendance/bootstrap.min.css' %}">
+
 </head>
-<body>
+<body style="background-color: #FAFBFC">
 
 <!-- SHOWS THE DASHBOARD FOR THE ADMIN CONTAINS 3 OPTIONS TO ADD DELETE AND MODIFY-->
 
+
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color:yellowgreen">
+    <a class="navbar-brand"  style="color: white ; " >CampusSoft</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <!---  <ul class="navbar-nav mr-auto">
+       
+      </ul>-->
+    
+    </div>
+  </nav>
+
+<!--
 <h1><a href="{% url 'attendance:register' %}">REGISTER</a></h1>
-<h2><a href="{% url 'attendance:delete_user' %}">DELETE</a> </h2>
-<h3><a href="{% url 'attendance:update_user' %}">Update</a> </h3>
+
+-->
+<div class="container" style="margin-top: 50px">
+    <div class="col">
+<table class="table table-bordered" >
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">ID</th>
+            <th scope="col">NAME</th>
+            <th scope="col">ACTIONS</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for staff in staffs %}
+          <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>{{ staff.staff_id }}</td>
+            <td >{{ staff.name }}</td>
+            <td width=100>
+
+                    <a href="{% url 'attendance:update' pk=staff.staff_id %}"><img src="{% static 'attendance/update.png' %}  " alt="update"/></a>
+                    <a href="{% url 'attendance:delete' id=staff.staff_id %}"><img src="{% static 'attendance/delete.png' %}  " alt="delete"/></a>
+                   
+                   
+
+
+            </td>
+          </tr>
+            
+            {% endfor %}
+         
+        </tbody>
+      </table>
+    </div>
+</div>
+
+
 
 </body>
 </html>

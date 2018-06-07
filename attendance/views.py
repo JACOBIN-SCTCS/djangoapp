@@ -50,7 +50,8 @@ def dashboard(request):
 
 def admin_dashboard(request):
         if request.user.is_superuser:
-            return render(request,'attendance/admin_dashboard.html')
+            staff_list=staff.objects.all()
+            return render(request,'attendance/admin_dashboard.html',{'staffs':staff_list})
         else:
             return redirect('attendance:login')
 
@@ -120,14 +121,7 @@ def  register(request):
 
 
 
-#delete a user from the app (UI)
-# url=127.0.0.1:8000/admin_user/delete/
 
-@user_passes_test(lambda u : u.is_superuser)
-def delete_user(request):
-    del_flag=1
-    staff_list=staff.objects.all()
-    return render(request,'attendance/list.html',{'staffs':staff_list , 'delflag':del_flag })
 
 
 
@@ -138,19 +132,10 @@ def delete_user(request):
 def delete(request,id):
     userfield=User.objects.get(username=id)
     userfield.delete()
-    return HttpResponseRedirect(reverse('attendance:delete_user'))
+    return HttpResponseRedirect(reverse('attendance:admin_user'))
 
 
 
-
-#updating the info of a user(UI0
-# url=127.0.0.1:8000/admin_user/update/
-
-@user_passes_test(lambda u : u.is_superuser,login_url='/login')
-def update(request):
-    updateflag=1
-    staff_list=staff.objects.all()
-    return render(request,'attendance/list.html',{'staffs':staff_list , 'updateflag':updateflag })
 
 
 
@@ -160,8 +145,13 @@ class Update_view(UpdateView):
     model = staff
     fields = ['staff_id','name','category','department','qualification'
                 ,'joining_date','termination_date']
+    
 
     template_name_suffix = '_update_form'
+
+    def get_success_url(self):
+        return reverse('attendance:admin_user')
+
 
 
 
