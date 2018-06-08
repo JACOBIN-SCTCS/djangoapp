@@ -1,19 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <title>Title</title>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'attendance/bootstrap.min.css' %}">
+
 </head>
-<body>
+<body style="background-color: #FAFBFC">
 
 <!-- DISPLAYS PREPOPULATED FORM WITH AN EXISTING EMPLOYEES DETAIL FOR THE
 PURPOSE OF UPDATION -->
+
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color:yellowgreen">
+        <a class="navbar-brand"  style="color: white ; " >CampusSoft</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <!---  <ul class="navbar-nav mr-auto">
+           
+          </ul>-->
+        
+        </div>
+      </nav>
+    
 
 
 
 <form action="" method="post">
     {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div class="form-group">
+        <label for="{{ form.staff_id.id_for_label }}">Example label</label>
+        {{ form.staff_id }}
 
+      
+    </div>
+
+
+
+    
     {{ form.as_p }}
     <input type="submit" value="Update"/>
 
