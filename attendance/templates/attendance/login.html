@@ -1,21 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+        {% load static %}
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'attendance/bootstrap.min.css' %}">
+</head>
 
-<body>
+<body style="background-color: #FAFBFC">
 
 <!-- THE LOGIN PAGE FOR BOTH THE ADMIN AND THE SUPERUSER -->
 
 
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color:yellowgreen">
+    <a class="navbar-brand"  style="color: white ; " >CampusSoft</a>
+   
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <!---  <ul class="navbar-nav mr-auto">
+       
+      </ul>-->
+    
+    </div>
+  </nav>
+
+  <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6 mx-auto" style="padding-top: 40px; padding-left: 40px ;padding-right: 40px;">
+                <div class="card d-flex align-items-center h-100">
+                        <div class="card-body">
+                               
+                                <form method="POST" action="" >
+                                      
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            {{ form.as_p }}
+                                        </div>
+                                        
+                                            <button type="submit"  class="btn btn-primary">Login</button>
+                                        
+                                </form>
+                        </div>
+                      </div>
 
 
-<form method="POST" action="" >
-    {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" >Login</button>
+        </div>
+        <div class="col-sm-3"></div>
+      </div> 
+
+
+
 </form>
+</body>
 
 
 

@@ -29,25 +29,22 @@ PURPOSE OF UPDATION -->
     
 
 
-
-<form action="" method="post">
-    {% csrf_token %}
-    {{ form.non_field_errors }}
-    <div class="form-group">
-        <label for="{{ form.staff_id.id_for_label }}">Example label</label>
-        {{ form.staff_id }}
-
-      
-    </div>
-
-
-
-    
-    {{ form.as_p }}
-    <input type="submit" value="Update"/>
-
-
-
-</form>
+      <div class="row">
+          <div class="col-sm-3"></div>
+          <div class="col-sm-6 mx-auto" style="padding-top: 40px; padding-left: 40px ;padding-right: 40px;">
+                  <div class="card d-flex align-items-center h-100">
+                          <div class="card-body">
+                              <form action="" method="post">
+                                  {% csrf_token %} 
+                                  {{ form.as_p }}
+                                <input type="submit" value="Update"/>
+ 
+                            </form>
+                            </div>
+                      </div>
+            </div>
+            <div class="col-sm-3"></div>
+        </div> 
+            
 </body>
 </html>
