@@ -24,8 +24,12 @@
     <!---  <ul class="navbar-nav mr-auto">
        
       </ul>-->
+
     
     </div>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="{% url 'attendance:logout' %}" style="color: white; text-decoration: none;">Logout</a></li>
+    </ul>
   </nav>
 
 <!--
@@ -38,7 +42,7 @@
           <a href="{% url 'attendance:register' %}" >
          <i class="material-icons" style="font-size:15px;">add</i>
                 Add new</a></p>
-<table class="table table-bordered" >
+<table class="table table-bordered table-striped" >
         <thead class="thead-dark">
           <tr>
             <th scope="col">#</th>
@@ -70,6 +74,9 @@
       </table>
     </div>
 </div>
+
+
+
 
 
 

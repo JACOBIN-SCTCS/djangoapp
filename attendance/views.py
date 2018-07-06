@@ -11,6 +11,8 @@ from .models import leave_request as lrequest
 from django.urls import reverse
 from django.views.generic.edit import UpdateView
 from django.contrib.auth.decorators import user_passes_test
+from django.db import connections
+
 
 
 
@@ -145,7 +147,7 @@ class Update_view(UpdateView):
     model = staff
     fields = ['staff_id','name','category','department','qualification'
                 ,'joining_date','termination_date']
-    
+  
 
     template_name_suffix = '_update_form'
 
@@ -277,5 +279,27 @@ def approve_leave_requests(request,pk):
 
 
     return HttpResponseRedirect(reverse('attendance:pendingleaverequests'))
+
+
+
+
+#view for showing the detailed attendance
+
+def detailed_attendance(request):
+    current_user_id=request.user.username
+    cursor=connections['attlog'].cursor()
+    cursor.execute("SELECT attdate FROM attlog WHERE eid = %s",[current_user_id])
+    loglist=dictfetchall(cursor)
+
+    return render(request,'attendance/detailed_attendance.html',{'records':loglist})
+
+
+
+def dictfetchall(cursor):
+    columns = [col[0] for col in cursor.description]
+    return [
+        dict(zip(columns, row))
+        for row in cursor.fetchall()
+    ]
 
 

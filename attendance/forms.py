@@ -22,8 +22,11 @@ class RegisterForm(forms.ModelForm):
 
     class Meta:
         model=staff
-        fields=('staff_id','name','category','department','qualification'
-                ,'joining_date','termination_date')
+        fields=['staff_id','name','category','department','qualification'
+                ,'joining_date','termination_date']
+        #widgets={
+         #   'staff_id':forms.NumberInput(attrs={'class':'form-control',})
+        #}    
 
 
 class LeaveRequestForm(forms.ModelForm):

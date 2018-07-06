@@ -46,8 +46,10 @@ urlpatterns =[
     path('dashboard/leave_requests/' , views.available_leave_request,name='pendingleaverequests'),
 
     # approves the leave for taken by a person and redirects to dashboard/leave_requests
-    path('dashboard/leave_requests/id/<int:pk>',views.approve_leave_requests,name='approve_leave_request' )
+    path('dashboard/leave_requests/id/<int:pk>',views.approve_leave_requests,name='approve_leave_request' ),
 
+    # url for displaying the detailed attendance
+    path('dashboard/detailed_attendance',views.detailed_attendance,name='detailed_attendance')
 
 ]
 
