@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Title</title>
     <link rel="stylesheet" type="text/css" href="{% static 'attendance/bootstrap.min.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Gaegu" rel="stylesheet"> 
 </head>
 
 <body style="background-color: #FAFBFC">
@@ -15,7 +16,7 @@
 
 
 <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:yellowgreen">
-    <a class="navbar-brand"  style="color: white ; " >CampusSoft</a>
+    <a class="navbar-brand"  style="color: white ; " href="{% url 'attendance:login' %}" >CampusSoft</a>
    
   
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -30,17 +31,28 @@
         <div class="col-sm-3"></div>
         <div class="col-sm-6 mx-auto" style="padding-top: 40px; padding-left: 40px ;padding-right: 40px;">
                 <div class="card d-flex align-items-center h-100">
-                        <div class="card-body">
-                               
-                                <form method="POST" action="" >
-                                      
-                                        {% csrf_token %}
-                                        <div class="form-group">
-                                            {{ form.as_p }}
+                        <div class="card-body " style="padding: 50px 50px 50px 50px">
+                               <p style="text-align: center; color: red; font-size:30px; font-family: 'Gaegu' ,cursive;">WELCOME</p>
+                               <form method="POST" action="" >
+                                    {% csrf_token %}
+                                   
+                                      {% for field in form %}
+                                      <div class="form-group has-errors text-danger small">
+                                            {{field.errors}}
                                         </div>
+                                     
+                                        <div class="form-group">
+                                            {{ field}}
+                                        </div>
+                                    {% endfor %}
                                         
-                                            <button type="submit"  class="btn btn-primary">Login</button>
-                                        
+                                            <button type="submit"  class="btn btn-primary center" style="width: 100%">Login</button>
+                                    
+                                            {% for error in form.non_field_errors %}
+                                            <div class="form-group has-errors text-danger small text-center ">
+                                                {{error}}
+                                            </div>
+                                            {% endfor %}
                                 </form>
                         </div>
                       </div>

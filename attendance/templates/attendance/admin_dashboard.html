@@ -41,7 +41,7 @@
       <p style="text-align: right ; margin-bottom: 5px">
           <a href="{% url 'attendance:register' %}" >
          <i class="material-icons" style="font-size:15px;">add</i>
-                Add new</a></p>
+                ADD NEW</a></p>
 <table class="table table-bordered table-striped" >
         <thead class="thead-dark">
           <tr>
@@ -56,11 +56,11 @@
           <tr>
             <th scope="row">{{ forloop.counter }}</th>
             <td>{{ staff.staff_id }}</td>
-            <td >{{ staff.name }}</td>
+            <td>{{ staff.name }}</td>
             <td width=100>
 
                     <a href="{% url 'attendance:update' pk=staff.staff_id %}"><img src="{% static 'attendance/update.png' %}  " alt="update"/></a>
-                    <a href="{% url 'attendance:delete' id=staff.staff_id %}"><img src="{% static 'attendance/delete.png' %}  " alt="delete"/></a>
+                    <a href="{% url 'attendance:delete' id=staff.staff_id %}" onclick="return confirm('Are you sure of deleting')"><img src="{% static 'attendance/delete.png' %}  " alt="delete"/></a>
                    
                    
 
@@ -69,9 +69,30 @@
           </tr>
             
             {% endfor %}
+            
          
         </tbody>
       </table>
+      
+      <div class="pagination " style="float: right" >
+        <span class="step-links" >
+            {% if staffs.has_previous %}
+                <a href="?page=1"><i class="material-icons" style="font-size:20px;">first_page</i></a>
+                <a href="?page={{ staffs.previous_page_number }}"><i class="material-icons" style="font-size:20px;">navigate_before</i></a>
+            {% endif %}
+    
+            <span class="current " style="font-size: 15px ; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif ; height: auto">
+                PAGE {{ staffs.number }} 
+            </span>
+    
+            {% if staffs.has_next %}
+                <a href="?page={{ staffs.next_page_number }}"><i class="material-icons" style="font-size:20px;">navigate_next</i></a>
+                <a href="?page={{ staffs.paginator.num_pages }}"><i class="material-icons" style="font-size:20px;">last_page</i></a>
+            {% endif %}
+        </span>
+    </div>
+  
+    
     </div>
 </div>
 

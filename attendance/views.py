@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import  HttpResponseRedirect
 from .forms import LoginForm , RegisterForm,LeaveRequestForm
+from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
@@ -12,6 +13,7 @@ from django.urls import reverse
 from django.views.generic.edit import UpdateView
 from django.contrib.auth.decorators import user_passes_test
 from django.db import connections
+from django import forms
 
 
 
@@ -52,7 +54,11 @@ def dashboard(request):
 
 def admin_dashboard(request):
         if request.user.is_superuser:
-            staff_list=staff.objects.all()
+            staffs=staff.objects.all().order_by('staff_id')
+            paginator=Paginator(staffs,15)
+            
+            page=request.GET.get('page')
+            staff_list=paginator.get_page(page)
             return render(request,'attendance/admin_dashboard.html',{'staffs':staff_list})
         else:
             return redirect('attendance:login')
@@ -63,22 +69,19 @@ def admin_dashboard(request):
 # url = 127.0.0.1:8000/login
 
 def login_user(request):
-    if request.method=='POST':
-        form=LoginForm(request.POST)
-        if form.is_valid():
-            user_obj=form.cleaned_data
-            name=user_obj['username']
-            password=user_obj['password']
-            user=authenticate(username=name,password=password)
-            if user is not None:
-                login(request,user)
-                if not user.is_superuser:
-                    return redirect('attendance:dash_board')
-                else:
-                    return redirect('attendance:admin_user')
-    else:
-        form=LoginForm()
+    form=LoginForm(request.POST or None)
+    if request.POST and form.is_valid():
+        user=form.login(request)
+        if user:
+            login(request,user)
+            if not user.is_superuser:
+                return redirect('attendance:dash_board')
+            else:
+                return redirect('attendance:admin_user')
+    
     return render(request,'attendance/login.html',{'form':form})
+
+
 
 
 #logout
@@ -294,7 +297,7 @@ def detailed_attendance(request):
     return render(request,'attendance/detailed_attendance.html',{'records':loglist})
 
 
-
+# Returning the queryset for iteration in html page
 def dictfetchall(cursor):
     columns = [col[0] for col in cursor.description]
     return [

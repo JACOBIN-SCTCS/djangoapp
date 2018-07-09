@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     {% load static %}
+    {% load crispy_forms_tags %}
     <meta charset="UTF-8">
     <title>Title</title>
 
@@ -36,8 +37,8 @@ PURPOSE OF UPDATION -->
                           <div class="card-body">
                               <form action="" method="post">
                                   {% csrf_token %} 
-                                  {{ form.as_p }}
-                                <input type="submit" class="btn btn-primary" value="Update"/>
+                                  {{ form | crispy }}
+                                <input type="submit" class="btn btn-primary" style="width: 100%" value="Update"/>
  
                             </form>
                             </div>

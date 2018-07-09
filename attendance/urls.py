@@ -36,7 +36,7 @@ urlpatterns =[
 
 
     #page displaying table for the days absent
-    path('dasboard/leaves',views.leaves,name='leaves'),
+    path('dashboard/leaves',views.leaves,name='leaves'),
 
     #displays a form for submitting a leave letter
     path('dashboard/leave/id/<int:pk>',views.leave_request,name='leave_request'),

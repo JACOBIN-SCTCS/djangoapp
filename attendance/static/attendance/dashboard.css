@@ -37,10 +37,11 @@
 
 #logout a{
     text-decoration: none;
+    color:grey;
 }
 
 #logout a:hover {
-    background-color: #4CAF50;
+    color: #4CAF50;
   
     
 }
