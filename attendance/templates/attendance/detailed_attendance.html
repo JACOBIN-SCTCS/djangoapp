@@ -9,7 +9,26 @@
 
 </head>
 
-<body>
+<body style="background-color: #FAFBFC">
+
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:yellowgreen">
+                <a class="navbar-brand"  style="color: white ; " >CampusSoft</a>
+              
+              
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <!---  <ul class="navbar-nav mr-auto">
+                   
+                  </ul>-->
+            
+                
+                </div>
+                <ul class="nav navbar-nav navbar-right">
+                  <li><a href="{% url 'attendance:logout' %}" style="color: white; text-decoration: none;">Logout</a></li>
+                </ul>
+              </nav>
+              <a href="{% url 'attendance:detailed_attendance' year=prev_year  month=prev_month  %}">Previous</a>
+
+              <a href="{% url 'attendance:detailed_attendance' year=nxt_year  month=nxt_month  %}">Next</a>
 
     {% for log in records %}
     <h1>{{ log.attdate}}</h1>

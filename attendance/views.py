@@ -288,21 +288,68 @@ def approve_leave_requests(request,pk):
 
 #view for showing the detailed attendance
 
-def detailed_attendance(request):
+def detailed_attendance(request ,year=2018 ,month=6):
     current_user_id=request.user.username
     cursor=connections['attlog'].cursor()
-    cursor.execute("SELECT attdate FROM attlog WHERE eid = %s",[current_user_id])
+    prev_year,prev_month=fun_prev(year,month)
+    nxt_year,nxt_month=fun_next(year,month)
+    
+    
+    
+    cursor.execute("SELECT * FROM attlog WHERE eid = %s AND attdate >= '%s-%s-01' AND attdate  < '%s-%s-01'",[current_user_id,year,month,nxt_year,nxt_month] )
+    
     loglist=dictfetchall(cursor)
+    
 
-    return render(request,'attendance/detailed_attendance.html',{'records':loglist})
+    return render(request,'attendance/detailed_attendance.html',{'records':loglist,
+    'nxt_year':nxt_year,
+    'nxt_month':nxt_month,
+    'prev_year':prev_year,
+    'prev_month':prev_month })
 
 
-# Returning the queryset for iteration in html page
+
+
+
+
+
+
+################################################### UTILITY FUNCTIONS ##########################
+
+
+
+ # Returning the queryset for iteration in html page
 def dictfetchall(cursor):
     columns = [col[0] for col in cursor.description]
     return [
         dict(zip(columns, row))
         for row in cursor.fetchall()
     ]
+
+
+
+# Function for returning the next month and year
+def fun_next(year,month):
+
+    if month==12:
+        nxt_month=1
+        nxt_year=year+1
+    else:
+        nxt_month=month+1
+        nxt_year=year
+    
+    return nxt_year,nxt_month
+
+# Function for returning the previous month and year
+def fun_prev(year,month):
+    if month==1:
+        prev_month=12
+        prev_year=year-1
+    
+    else:
+        prev_month=month-1
+        prev_year=year
+    return prev_year,prev_month
+
 
 

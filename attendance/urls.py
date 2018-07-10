@@ -49,7 +49,7 @@ urlpatterns =[
     path('dashboard/leave_requests/id/<int:pk>',views.approve_leave_requests,name='approve_leave_request' ),
 
     # url for displaying the detailed attendance
-    path('dashboard/detailed_attendance',views.detailed_attendance,name='detailed_attendance')
+    path('dashboard/detailed_attendance/<int:year>/<int:month>',views.detailed_attendance,name='detailed_attendance')
 
 ]
 
