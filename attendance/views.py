@@ -302,6 +302,8 @@ def detailed_attendance(request ,year=2018 ,month=6):
     
 
     return render(request,'attendance/detailed_attendance.html',{'records':loglist,
+    'current_year':year,
+    'current_month':month,
     'nxt_year':nxt_year,
     'nxt_month':nxt_month,
     'prev_year':prev_year,

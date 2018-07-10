@@ -5,6 +5,69 @@
         <meta charset="UTF-8">
         
         <link rel="stylesheet" type="text/css" href="{% static 'attendance/bootstrap.min.css' %}">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        rel="stylesheet">
+<style>
+   html{
+            box-sizing: border-box;
+        }
+
+        *, *::before, *::after {
+                box-sizing: inherit;
+        }
+
+        .grid{
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px 0 0 20px;
+        }
+
+        .grid-cell{
+            border: 0 solid transparent;
+            border-width: 0 20px 0px 0; 
+            width: calc(100% /1);
+            height:150px;
+            
+            
+            background-clip: padding-box;
+            text-align: center;
+            margin-top: 20px;
+            color: white;
+             
+            font-weight: bold;
+            font-size: 4em;
+            
+            
+        }
+
+        .grid-cell-inner{
+          box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+          height: 100%;
+          padding-top:25px;
+        }
+         /*.grid-wrapper{
+            box-shadow: 0 0 10px 2px green;
+        }*/
+
+        @media(min-width:400px){
+            .grid-cell{
+                width:calc(100%/3);
+
+            }
+        }
+        @media(min-width:600px){
+            .grid-cell{
+                width: calc(100%/7);
+            }
+        }
+     
+
+
+</style>
+
+
+
+
 
 
 </head>
@@ -26,13 +89,69 @@
                   <li><a href="{% url 'attendance:logout' %}" style="color: white; text-decoration: none;">Logout</a></li>
                 </ul>
               </nav>
-              <a href="{% url 'attendance:detailed_attendance' year=prev_year  month=prev_month  %}">Previous</a>
 
-              <a href="{% url 'attendance:detailed_attendance' year=nxt_year  month=nxt_month  %}">Next</a>
+              
+              {% with records|first as f %}     
+           
+                  <h1 style="text-align: center ;
+                  margin-top: 20px;
+                 
+                 
+                  "> 
+                  <a href="{% url 'attendance:detailed_attendance' year=prev_year  month=prev_month  %}" ><i class="material-icons" style="font-size:20px;">navigate_before</i></a>
+                  
+                  {{f.attdate | date:"M y"}}
+                  <a href="{% url 'attendance:detailed_attendance' year=nxt_year  month=nxt_month  %}"><i class="material-icons" style="font-size:20px;">navigate_next</i></a>
 
-    {% for log in records %}
-    <h1>{{ log.attdate}}</h1>
-    {% endfor %}
+                
+                </h1>
+
+                {% endwith %}
+
+              <a href="{% url 'attendance:dash_board' %}" style="
+              display: flex; align-items: center;text-decoration: none
+              
+              ; margin-top: 20px;
+              
+              ">
+                <i class="material-icons" style="font-size: 35px">
+                    arrow_back
+                </i> BACK TO DASHBOARD
+              </a>
+
+                  
+                  
+                        
+                 
+
+                        
+                        
+
+    <div class="grid-wrapper">
+      <div class="grid">
+
+          {% for log in records %}
+           {% if log.present %}
+          <div class="grid-cell" style="background-color: green;">
+            <div class="grid-cell-inner">
+            {{ log.attdate | date:"d"}}
+          </div>
+          </div>
+          {% else %}
+          <div class="grid-cell" style="background-color: red;">
+              <div class="grid-cell-inner">
+              {{ log.attdate | date:"d"}}
+            </div>
+            </div>
+
+
+          {% endif %}
+          {% endfor %}
+
+      </div>
+    </div>
+
+    
 
 </body>
 
