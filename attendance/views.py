@@ -55,6 +55,9 @@ def dashboard(request):
 def admin_dashboard(request):
         if request.user.is_superuser:
             staffs=staff.objects.all().order_by('staff_id')
+            query=request.GET.get("q")
+            if query:
+                staffs=staffs.filter(staff_id__icontains=query)
             paginator=Paginator(staffs,15)
             
             page=request.GET.get('page')
@@ -312,6 +315,19 @@ def detailed_attendance(request ,year=2018 ,month=6):
     'prev_month':prev_month ,
     'offset':range(offset+1) })
 
+
+#@user_passes_test(lambda u : u.is_superuser)
+class UpdateLeave(UpdateView):
+    model = leave
+    fields = ['present_days','casual_leave' , 'compensation_leave' ,'earned_leave'
+    ,'half_pay_leave','leave_allowance' ,'duty_leave',
+    ]
+  
+
+    template_name_suffix = '_update_form'
+
+    def get_success_url(self):
+        return reverse('attendance:admin_user')
 
 
 

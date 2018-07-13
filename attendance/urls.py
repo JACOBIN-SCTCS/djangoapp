@@ -26,6 +26,9 @@ urlpatterns =[
     #url performs update
     path('admin_user/update/<int:pk>', views.Update_view.as_view(), name='update'),
 
+    #url for updating the user's leaves taken
+    path('admin_user/update_leave/<int:pk>',views.UpdateLeave.as_view(),name='update_leave'),
+
 
     #logging a user in
     path('login/',views.login_user,name='login'),
@@ -50,6 +53,10 @@ urlpatterns =[
 
     # url for displaying the detailed attendance
     path('dashboard/detailed_attendance/<int:year>/<int:month>',views.detailed_attendance,name='detailed_attendance')
+     
+       
+
+
 
 ]
 
