@@ -7,6 +7,26 @@
         <link rel="stylesheet" type="text/css" href="{% static 'attendance/bootstrap.min.css' %}">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
         rel="stylesheet">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+      
+        </script>
+
+        <script>
+          $(document).ready(function() {
+
+               $("a[logdetail]").click(function() {
+                var rec=$(this).attr("logdetail") ;
+                
+
+                $("#detailedreport").text(rec);
+    });
+           
+        });
+        </script>
+
+      
+
 <style>
    html{
             box-sizing: border-box;
@@ -19,46 +39,72 @@
         .grid{
             display: flex;
             flex-wrap: wrap;
-            padding: 20px 0 0 20px;
+            padding: 5px 0 0 5px;
         }
 
         .grid-cell{
             border: 0 solid transparent;
-            border-width: 0 20px 0px 0; 
-            width: calc(100% /1);
-            height:150px;
-            
+            border-width: 0 5px 0px 0; 
+            width: calc(100% /7);
+            height: 30px;
+            border-radius: 100%;
+           
             
             background-clip: padding-box;
             text-align: center;
-            margin-top: 20px;
+            margin-top: 10px;
             color: white;
              
             font-weight: bold;
-            font-size: 4em;
+            font-size: 1em;
             
             
         }
+        .cursorclass{
+            cursor: pointer;
+        }
+        p{
+            color: black;
+            font-size: 10px;
+        }
+        .detailcard{
+            margin-top: 15px;
+        }
+       
 
-        .grid-cell-inner{
+      /* .grid-cell-inner{
           box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
           height: 100%;
-          padding-top:25px;
+          padding-top:10px;
         }
-         /*.grid-wrapper{
-            box-shadow: 0 0 10px 2px green;
-        }*/
-
-        @media(min-width:400px){
+        */ 
+       /* @media(min-width:400px){
             .grid-cell{
                 width:calc(100%/3);
 
             }
-        }
+        }*/
         @media(min-width:600px){
             .grid-cell{
-                width: calc(100%/7);
+                border-width: 0 20px 0px 0; 
+                height: 70px;
+                
             }
+            .grid{
+                padding: 20px 0 0 20px;
+            }
+            .grid-cell-inner{
+                padding-top: 20px;
+            }
+
+            p{
+                font-size: 20px;
+            }
+            .detailcard{
+                margin-top: 0;
+            }
+            
+            
         }
      
 
@@ -82,77 +128,107 @@
                 <!---  <ul class="navbar-nav mr-auto">
                    
                   </ul>-->
-            
-                
                 </div>
                 <ul class="nav navbar-nav navbar-right">
                   <li><a href="{% url 'attendance:logout' %}" style="color: white; text-decoration: none;">Logout</a></li>
                 </ul>
               </nav>
+              <br/>
+              <br/>
+              <br/>
 
-              
-              {% with records|first as f %}     
+             <div class="container-fluid">
+                 <div class="row">
+                     <div class="col-sm-8">
+                        <div class="card">
+                            <div class="card-body">
+                                {% with records|first as f %}     
            
-                  <h1 style="text-align: center ;
-                  margin-top: 20px;
-                 
-                 
-                  "> 
-                  <a href="{% url 'attendance:detailed_attendance' year=prev_year  month=prev_month  %}" ><i class="material-icons" style="font-size:20px;">navigate_before</i></a>
-                  
-                  {{f.attdate | date:"M y"}}
-                  <a href="{% url 'attendance:detailed_attendance' year=nxt_year  month=nxt_month  %}"><i class="material-icons" style="font-size:20px;">navigate_next</i></a>
-
-                
-                </h1>
-
-                {% endwith %}
-
-              <a href="{% url 'attendance:dash_board' %}" style="
-              display: flex; align-items: center;text-decoration: none
+                                <h1 style="text-align: center ;
+                                margin-top: 20px;
+                               
+                               
+                                "> 
+                                <a href="{% url 'attendance:detailed_attendance' year=prev_year  month=prev_month  %}" ><i class="material-icons" style="font-size:20px;">navigate_before</i></a>
+                                
+                                {{f.attdate | date:"M y"}}
+                                <a href="{% url 'attendance:detailed_attendance' year=nxt_year  month=nxt_month  %}"><i class="material-icons" style="font-size:20px;">navigate_next</i></a>
               
-              ; margin-top: 20px;
+                              
+                              </h1>
+
+                              <div class="grid-wrapper">
+                                  <div class="grid">
+                                      
+                                      <div class="grid-cell"><p class="weekday">SUN</p></div>
+                                      <div class="grid-cell"><p class="weekday">MON</p></div>
+                                      <div class="grid-cell"><p class="weekday">TUE</p></div>
+                                      <div class="grid-cell"><p class="weekday">WED</p></div>
+                                      <div class="grid-cell"><p class="weekday">THU</p></div>
+                                      <div class="grid-cell"><p class="weekday">FRI</p></div>
+                                      <div class="grid-cell"><p class="weekday">SAT</p></div>
+                                            
+
+                                     
+                                  </div>
+                              </div>
               
-              ">
-                <i class="material-icons" style="font-size: 35px">
-                    arrow_back
-                </i> BACK TO DASHBOARD
-              </a>
+                              {% endwith %}
+                              <div class="grid-wrapper">
+                                    <div class="grid">
+                                        {% for i in offset %}
 
-                  
-                  
-                        
-                 
+                                        <div class="grid-cell"></div>
 
-                        
-                        
+                                        {% endfor %}
+                              
+                                        {% for log in records %}
+                                         {% if log.present %}
+                                        <div class="grid-cell cursorclass" style="background-color: #8FE2C2">
+                                          <div class="grid-cell-inner">
+                                            <a logdetail="{{log.attdate}}">{{ log.attdate | date:"d"}}</a>
+                                        </div>
+                                        </div>
+                                        {% else %}
+                                        <div class="grid-cell cursorclass" style="background-color: #FEC2C2">
+                                            <div class="grid-cell-inner">
+                                            <a logdetail="{{log}}">{{ log.attdate | date:"d"}}</a>
+                                          </div>
+                                          </div>
+                              
+                              
+                                        {% endif %}
+                                        {% endfor %}
+                              
+                                    </div>
+                              </div>
 
-    <div class="grid-wrapper">
-      <div class="grid">
-
-          {% for log in records %}
-           {% if log.present %}
-          <div class="grid-cell" style="background-color: green;">
-            <div class="grid-cell-inner">
-            {{ log.attdate | date:"d"}}
-          </div>
-          </div>
-          {% else %}
-          <div class="grid-cell" style="background-color: red;">
-              <div class="grid-cell-inner">
-              {{ log.attdate | date:"d"}}
-            </div>
-            </div>
+                          
+                                    
+                          
+                                
+                             
 
 
-          {% endif %}
-          {% endfor %}
+                            </div>
+                        </div>
+                     </div>
+                     <div class="col-sm-4">
+                         <div class="card detailcard" style="height: 350px;">
+                            <div class="card-header">
+                                Detailed Report
+                            </div>
+                            <div class="card-body" id="detailedreport">
 
-      </div>
-    </div>
+                            </div>
+                         </div>
+                         <div class="card" style="height: 300px; margin-top: 20px">
 
-    
-
+                            </div>
+                     </div>
+                 </div>
+             </div>
+                                                                     
 </body>
 
 

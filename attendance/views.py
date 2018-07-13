@@ -14,7 +14,7 @@ from django.views.generic.edit import UpdateView
 from django.contrib.auth.decorators import user_passes_test
 from django.db import connections
 from django import forms
-
+import datetime
 
 
 
@@ -294,6 +294,8 @@ def detailed_attendance(request ,year=2018 ,month=6):
     prev_year,prev_month=fun_prev(year,month)
     nxt_year,nxt_month=fun_next(year,month)
     
+
+    offset=datetime.datetime(year,month,1).weekday()
     
     
     cursor.execute("SELECT * FROM attlog WHERE eid = %s AND attdate >= '%s-%s-01' AND attdate  < '%s-%s-01'",[current_user_id,year,month,nxt_year,nxt_month] )
@@ -307,7 +309,8 @@ def detailed_attendance(request ,year=2018 ,month=6):
     'nxt_year':nxt_year,
     'nxt_month':nxt_month,
     'prev_year':prev_year,
-    'prev_month':prev_month })
+    'prev_month':prev_month ,
+    'offset':range(offset+1) })
 
 
 
